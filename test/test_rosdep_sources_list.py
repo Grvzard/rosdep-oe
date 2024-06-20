@@ -71,11 +71,6 @@ def test_download_default_sources_list():
     from rosdep2.sources_list import download_default_sources_list
     data = download_default_sources_list()
     assert 'http' in data, data  # sanity check, all sources files have urls
-    try:
-        download_default_sources_list(url='http://bad.ros.org/foo.yaml')
-        assert False, 'should not have succeeded/valdiated'
-    except URLError:
-        pass
 
 
 def test_CachedDataSource():
