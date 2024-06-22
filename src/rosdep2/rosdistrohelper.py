@@ -27,7 +27,9 @@
 
 # Author Paul Mathieu/paul@osrfoundation.org
 
-import rosdistro
+from .rosdistro import get_index_url as rosdistro_get_index_url
+from .rosdistro import get_index as rosdistro_get_index
+from .rosdistro import get_distribution_file
 
 
 class PreRep137Warning(UserWarning):
@@ -52,8 +54,8 @@ class ReleaseFile(object):
 
 
 def _check_cache():
-    if _RDCache.index_url != rosdistro.get_index_url():
-        _RDCache.index_url = rosdistro.get_index_url()
+    if _RDCache.index_url != rosdistro_get_index_url():
+        _RDCache.index_url = rosdistro_get_index_url()
         _RDCache.index = None
         _RDCache.release_files = {}
 
@@ -66,14 +68,14 @@ def get_index_url():
 def get_index():
     _check_cache()
     if _RDCache.index is None:
-        _RDCache.index = rosdistro.get_index(_RDCache.index_url)
+        _RDCache.index = rosdistro_get_index(_RDCache.index_url)
     return _RDCache.index
 
 
 def get_release_file(distro):
     _check_cache()
     if distro not in _RDCache.release_files:
-        dist_file = rosdistro.get_distribution_file(get_index(), distro)
+        dist_file = get_distribution_file(get_index(), distro)
         _RDCache.release_files[distro] = ReleaseFile(dist_file)
     return _RDCache.release_files[distro]
 
